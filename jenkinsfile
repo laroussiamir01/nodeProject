@@ -4,7 +4,7 @@ pipeline{
 
   environment {
         registryCredentials = "nexus"
-        registry = "http://192.168.50.4:8083"
+        registry = "192.168.50.4:8083"
     }
    
   stages {
@@ -61,7 +61,7 @@ stage('Build application') {
 
 
         //  Uploading Docker images into Nexus Registry
-    stage('Deploy  to Nexus') {
+  /*   stage('Deploy  to Nexus') {
      steps{  
          script {
 
@@ -71,7 +71,7 @@ stage('Build application') {
         }
       }
     }
-
+ */
      stage('Run application ') {
      steps{  
          script {
