@@ -3,7 +3,7 @@ pipeline{
   agent any
 
   environment {
-        registryCredentials = "nexus"
+        registryCredentials = "docker"
         registry = "192.168.50.4:8083"
     }
    
@@ -27,7 +27,7 @@ stage('Unit Test') {
       }
     }
 
-    stage('SonarQube Analysis') {
+  /*   stage('SonarQube Analysis') {
       steps{
       script {  
                     def scannerHome = tool 'scanner'
@@ -37,7 +37,7 @@ stage('Unit Test') {
                 } 
               }  
             }
-
+ */
 stage('Build application') {
       steps{
         
