@@ -1,3 +1,4 @@
+
 pipeline{
   agent any
 
@@ -65,7 +66,7 @@ stage('Build application') {
          script {
 
              docker.withRegistry("http://"+registry, registryCredentials ) {
-            sh('docker push 192.168.50.4:8083/nodemongoapp:6.0')
+            sh('docker push $registry/nodemongoapp:6.0 ')
           }
         }
       }
