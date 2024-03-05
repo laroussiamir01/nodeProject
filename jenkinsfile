@@ -1,10 +1,15 @@
 pipeline{
   agent any
 
-   environment {
+   /* environment {
         registryCredentials = "nexus"
         registry = "192.168.50.4:8081"
-    } 
+    }  */
+
+    environment {
+NEXUS_URL = 'http://192.168.50.4:8081/#admin/repository/repositories:docker-repo'
+IMAGE_NAME = 'nodemongoapp:6.0'
+}
    
   stages {
 
@@ -46,8 +51,25 @@ stage('Build application') {
       }
     }
 
+stage('Build Docker Image'){
+steps {
+script {
+docker.build("$[IMAGE_NAME}")
+}
+}
+}
+
+stage('Push Docker Image to Nexus') {
+steps{
+    script {
+docker.withRegistry("$[NEXUS_URL}", 'nexus')
+docker.image ("$[IMAGE_NAME}").push()
+}
+}
+}
 
 
+/* 
         // Building Docker images
     stage('Building images (node and mongo)') {
       steps{
@@ -69,6 +91,6 @@ stage('Build application') {
           }
         }
       }
-    }
+    } */
   }
 }
