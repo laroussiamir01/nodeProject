@@ -22,9 +22,5 @@ services:
       - '5000:5000'
     depends_on:
       - db
-  jenkins-docker:
-    environment:
-      - DOCKER_INSECURE_REGISTRY="192.168.50.4:8083"
 volumes:
   mongo-data:
-
