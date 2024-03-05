@@ -67,7 +67,7 @@ stage('Build application') {
             withDockerRegistry([credentialsId: 'nexus', url: "http://${registry}"]) {
              // sh("echo 'nexus' | docker login -u admin --password-stdin http://192.168.50.4:8083")
                 sh("echo 'nexus' | docker login -u 'admin' --password-stdin 192.168.50.4:8083")
-                sh("docker push amirlaroussi/nodemongoapp:5.0")
+                sh('docker push $registry/nodemongoapp:6.0')
             }
         }
     }
