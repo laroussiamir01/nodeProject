@@ -3,9 +3,9 @@ pipeline{
   agent any
 
    environment {
-        registryCredentials = "nexus"
-        registry = "http://192.168.50.4:8081/#admin/repository/repositories:docker-repo"
-    }
+NEXUS_URL = 'http://192.168.50.4:8081/#admin/repository/repositories:docker-repo'
+IMAGE_NAME = '192.168.50.4:8083/nodemongoapp:6.0'
+}
    
   stages {
 
@@ -47,84 +47,23 @@ stage('Build application') {
       }
     }
 // Building Docker images
-   
-
-        // Building Docker images
-    stage('Building images (node and mongo)') {
-      steps{
-        
-        script {
-         sh('docker-compose build')
-        }
-      }
-    }
-
-  // Uploading Docker images into Nexus Registry
-    stage('Uploading to Nexus') {
-     steps{  
-         script {
-             docker.withRegistry( 'http://'+registry, registryCredentials ) {
-             sh('docker push $registry/nodemongoapp:6.0')
-          }
-        }
-      }
-    }
-        //  Uploading Docker images into Nexus Registry
-   /*   stage('Deploy to Nexus') {
-  steps {
-    script {
-      def registry = "http://192.168.50.4:8083"
-def registryCredentials = [
-  username: "amirlaroussi",
-  password: "Amirpx99!"
-]
-      sh "docker login ${registry} -u ${registryCredentials.username} -p ${registryCredentials.password}"
-      sh "docker push ${registry}/nodemongoapp:6.0"
-    }
-  }
-} */
-
- /*    stage('Deploy to Nexus') {
-  steps {
-    script {
-docker.withRegistry( '', registryCredential ) {
-dockerImage.push()
+  
+stage('Build Docker Image') {
+steps {
+script {
+docker.build("$[IMAGE_NAME}")
 }
 }
-  }
 }
- */
-      stage('Run application ') {
-     steps{  
-         script {
-           docker.withRegistry("http://"+registry, registryCredentials ) {
+stage('Push Docker Image to Nexus') {
+steps {
+script {
+docker.withRegistry("${NEXUS_URL}", 'nexus')
+docker.image ("${IMAGE_NAME}").push()
+}
+}
+}
 
-            sh('docker pull $registry/nodemongoapp:6.0')
-
-            sh('docker-compose up -d')
-          }
-        }
-      }
-    } 
-
-     stage("Run Prometheus"){
-      steps{
- 
-        script{
-
-        sh('docker start prometheus')
-
-        }
-      }
-    }
-     stage("Run Grafana"){ 
-      steps{
-
-        script{
-        sh('docker start grafana')
-        }
-      }
-    }
   } 
 
 }
