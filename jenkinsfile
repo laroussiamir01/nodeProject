@@ -1,11 +1,10 @@
-
 pipeline{
   agent any
 
-   environment {
-NEXUS_URL = 'http://192.168.50.4:8081/#admin/repository/repositories:docker-repo'
-IMAGE_NAME = '192.168.50.4:8083/nodemongoapp:6.0'
-}
+  environment {
+        registryCredentials = "nexus"
+        registry = "192.168.50.4:8081/#admin/repository/repositories:docker-repo"
+    }
    
   stages {
 
@@ -46,26 +45,63 @@ stage('Build application') {
         }
       }
     }
-// Building Docker images
-  
-stage('Build Docker Image') {
-steps {
-script {
-docker.build("$[IMAGE_NAME}")
-}
-}
-}
-stage('Push Docker Image to Nexus') {
-steps {
-script {
-docker.withRegistry("${NEXUS_URL}", 'nexus')
-docker.image ("${IMAGE_NAME}").push()
-}
-}
-}
 
+
+
+        // Building Docker images
+    stage('Building images (node and mongo)') {
+      steps{
+        
+        script {
+         sh('docker-compose build')
+        }
+      }
+    }
+
+
+        //  Uploading Docker images into Nexus Registry
+    stage('Deploy  to Nexus') {
+     steps{  
+         script {
+
+             docker.withRegistry("http://"+registry, registryCredentials ) {
+            sh('docker push 192.168.50.4:8083/nodemongoapp:6.0 ')
+          }
+        }
+      }
+    }
+
+     stage('Run application ') {
+     steps{  
+         script {
+           docker.withRegistry("http://"+registry, registryCredentials ) {
+
+            sh('docker pull $registry/nodemongoapp:6.0 ')
+
+            sh('docker-compose up -d ')
+          }
+        }
+      }
+    }
+
+     stage("Run Prometheus"){
+      steps{
+ 
+        script{
+
+        sh('docker start prometheus')
+
+        }
+      }
+    }
+     stage("Run Grafana"){ 
+      steps{
+
+        script{
+        sh('docker start grafana')
+        }
+      }
+    }
   } 
 
 }
-
-
