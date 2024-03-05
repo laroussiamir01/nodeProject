@@ -61,17 +61,16 @@ stage('Build application') {
 
 
         //  Uploading Docker images into Nexus Registry
-    stage('Deploy  to Nexus') {
-     steps{  
-         script {
-
-            docker.withRegistry("http://${registry}", registryCredentials) {
-                        sh("docker login -u amirlaroussi -p Amirpx99! ${registry}")
-                        sh("docker push ${registry}/nodemongoapp:6.0")
-                    }
+  stage('Deploy to Nexus') {
+    steps {
+        script {
+            docker.withRegistry("${registry}", registryCredentials) {
+                sh("echo 'Amirpx99!' | docker login -u amirlaroussi --password-stdin ${registry}")
+                sh("docker push ${registry}/nodemongoapp:6.0")
+            }
         }
-      }
     }
+}
 
      stage('Run application ') {
      steps{  
