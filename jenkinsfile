@@ -65,12 +65,14 @@ stage('Build application') {
      steps{  
          script {
 
-             docker.withRegistry("http://"+registry, registryCredentials ) {
-            sh('docker push $registry/nodemongoapp:6.0')
+             docker.withRegistry("http://${registry}", registryCredentials) {
+                        sh("docker login -u amirlaroussi -p Amirpx99! ${registry}")
+                        sh("docker push ${registry}/nodemongoapp:6.0")
+                    }
           }
         }
       }
-    }
+    
 
      stage('Run application ') {
      steps{  
