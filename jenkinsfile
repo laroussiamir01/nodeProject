@@ -4,7 +4,7 @@ pipeline{
 
   environment {
         registryCredentials = "nexus"
-        registry = "192.168.50.4:8081"
+        registry = "192.168.50.4:8083"
     }
    
   stages {
@@ -64,7 +64,7 @@ stage('Build application') {
   stage('Deploy to Nexus') {
     steps {
         script {
-            docker.withRegistry("${registry}", registryCredentials) {
+            docker.withRegistry("http://${registry}", registryCredentials) {
                 sh("echo 'Amirpx99!' | docker login -u amirlaroussi --password-stdin ${registry}")
                 sh("docker push ${registry}/nodemongoapp:6.0")
             }
