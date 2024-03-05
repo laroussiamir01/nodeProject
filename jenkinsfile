@@ -61,7 +61,7 @@ stage('Build application') {
 
 
         //  Uploading Docker images into Nexus Registry
-    stage('Deploy  to Nexus') {
+   /*  stage('Deploy  to Nexus') {
       steps{  
          script {
 
@@ -71,7 +71,16 @@ stage('Build application') {
           }
         }
       }
-    } 
+    }  */
+
+    stage('Deploy to Nexus') {
+  steps {
+    script {
+      sh('docker login -u amirlaroussi -p Amirpx99!')
+      sh('docker push amirlaroussi/nodemongoapp:6.0')
+    }
+  }
+}
 
       stage('Run application ') {
      steps{  
