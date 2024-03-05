@@ -3,8 +3,8 @@ pipeline{
   agent any
 
   environment {
-        registryCredentials = "docker"
-        registry = "192.168.50.4:8083"
+        registryCredentials = "nexus"
+        registry = "192.168.33.10:8083"
     }
    
   stages {
@@ -27,7 +27,7 @@ stage('Unit Test') {
       }
     }
 
-  /*   stage('SonarQube Analysis') {
+    stage('SonarQube Analysis') {
       steps{
       script {  
                     def scannerHome = tool 'scanner'
@@ -37,7 +37,7 @@ stage('Unit Test') {
                 } 
               }  
             }
- */
+
 stage('Build application') {
       steps{
         
@@ -65,21 +65,19 @@ stage('Build application') {
      steps{  
          script {
 
-             docker.withRegistry("http://${registry}", registryCredentials) {
-                        sh("docker login -u amirlaroussi -p Amirpx99! ${registry}")
-                        sh("docker push ${registry}/nodemongoapp:6.0")
-                    }
+             docker.withRegistry("http://"+registry, registryCredentials ) {
+            sh('docker push $registry/nodemongoapp:6.0 ')
           }
         }
       }
-    
+    }
 
      stage('Run application ') {
      steps{  
          script {
            docker.withRegistry("http://"+registry, registryCredentials ) {
 
-            sh('docker pull $registry/nodemongoapp:6.0')
+            sh('docker pull $registry/nodemongoapp:6.0 ')
 
             sh('docker-compose up -d ')
           }
@@ -108,3 +106,5 @@ stage('Build application') {
   } 
 
 }
+
+
