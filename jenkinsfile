@@ -2,10 +2,10 @@
 pipeline{
   agent any
 
- /*  environment {
-        registryCredentials = "nexus"
-        registry = "192.168.50.4:8081"
-    } */
+   environment {
+        registryCredentials = "docker"
+        registry = "192.168.50.4:8083"
+    }
    
   stages {
 
@@ -61,29 +61,29 @@ stage('Build application') {
 
 
         //  Uploading Docker images into Nexus Registry
-  /*   stage('Deploy  to Nexus') {
-     steps{  
+    stage('Deploy  to Nexus') {
+      steps{  
          script {
 
              docker.withRegistry("http://"+registry, registryCredentials ) {
-            sh('docker push ${registry}/nodemongoapp:6.0 ')
+            sh('docker push $registry/nodemongoapp:6.0')
           }
         }
       }
-    } */
+    } 
 
-   /*   stage('Run application ') {
+      stage('Run application ') {
      steps{  
          script {
            docker.withRegistry("http://"+registry, registryCredentials ) {
 
-            sh('docker pull ${registry}/nodemongoapp:6.0 ')
+            sh('docker pull $registry/nodemongoapp:6.0')
 
-            sh('docker-compose up -d ')
+            sh('docker-compose up -d')
           }
         }
       }
-    } */
+    } 
 
      stage("Run Prometheus"){
       steps{
