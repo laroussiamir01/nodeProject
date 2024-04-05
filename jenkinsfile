@@ -20,7 +20,7 @@ pipeline{
 
 
 
-  /*   stage('SonarQube Analysis') {
+     stage('SonarQube Analysis') {
       steps{
       script {  
                     def scannerHome = tool 'scanner'
@@ -29,7 +29,7 @@ pipeline{
                         }
                 } 
               }  
-            } */
+            } 
 
 stage('Build application') {
       steps{
@@ -51,8 +51,7 @@ stage('Build application') {
         }
       }
     }
-
- stage('Unit Test') {
+stage('Unit Test') {
       steps{
         
         script {
@@ -60,6 +59,7 @@ stage('Build application') {
         }
       }
     } 
+ 
         //  Uploading Docker images into Nexus Registry
  stage('Deploy to Nexus') {
     steps {
