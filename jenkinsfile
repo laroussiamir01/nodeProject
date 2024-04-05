@@ -20,6 +20,16 @@ pipeline{
 
 
 
+  
+stage('Unit Test') {
+      steps{
+        
+        script {
+         sh('npm test')
+        }
+      }
+    } 
+
      stage('SonarQube Analysis') {
       steps{
       script {  
@@ -29,9 +39,9 @@ pipeline{
                         }
                 } 
               }  
-            } 
+            }
 
-stage('Build application') {
+            stage('Build application') {
       steps{
         
         script {
@@ -40,9 +50,7 @@ stage('Build application') {
       }
     }
 
-
-
-        // Building Docker images
+          // Building Docker images
     stage('Building images (node and mongo)') {
       steps{
         
@@ -51,14 +59,6 @@ stage('Build application') {
         }
       }
     }
-stage('Unit Test') {
-      steps{
-        
-        script {
-         sh('npm test')
-        }
-      }
-    } 
  
         //  Uploading Docker images into Nexus Registry
  stage('Deploy to Nexus') {
