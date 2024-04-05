@@ -1,5 +1,6 @@
 {
     "mongo": {
-        "uri": "mongodb://127.0.0.1:27017/nodeProject"
+        "uri": "mongodb://127.0.0.1:27017/nodeProject",
+        "uri1" :"mongodb+srv://mehdy:123456m@cluster0.1vtradk.mongodb.net/?retryWrites=true&w=majority"
     }
 }

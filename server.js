@@ -7,7 +7,7 @@ const productRoutes = require("./app");
 const server = express();
 
 //connectDB();
-const connect = mongoose.connect(configDB.mongo.uri);
+const connect = mongoose.connect(configDB.mongo.uri1);
 
 server.use("/api", productRoutes); //CRUD routes
 
