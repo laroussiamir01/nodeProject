@@ -2,12 +2,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const connectDB = require('./db')
-
+var configDB = require('./mongodb.json');
 const productRoutes = require("./app");
 const server = express();
 
-connectDB();
-
+//connectDB();
+const connect = mongoose.connect(configDB.mongo.uri);
 
 server.use("/api", productRoutes); //CRUD routes
 
